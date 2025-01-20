@@ -12,14 +12,18 @@ async def process_tasks(await_list: AwaitList):
 
 async def add_tasks(await_list: AwaitList):
     """Example of dynamically adding tasks."""
+    now = datetime.now()
+    print(f"[AddTasks] Current time: {now}")
+
     # Add a task scheduled 5 second later
-    task_time_5min = datetime.now() + timedelta(seconds=5)
+    task_time_5min = now + timedelta(seconds=5)
     await await_list.add_task(task_time_5min, "Task 5 second later")
     print(f"[AddTasks] Added: Task 5 second later for {task_time_5min}")
 
-    # Add a task scheduled 1 second later
     await asyncio.sleep(1)  # Wait 1 second
-    task_time_1sec = datetime.now() + timedelta(seconds=1)
+
+    # Add a task scheduled 1 second later
+    task_time_1sec = now + timedelta(seconds=1)
     await await_list.add_task(task_time_1sec, "Task 1 second later")
     print(f"[AddTasks] Added: Task 1 second later for {task_time_1sec}")
 
