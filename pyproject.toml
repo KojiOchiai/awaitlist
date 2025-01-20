@@ -5,6 +5,7 @@ description = "A simple async task scheduler"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { file = "LICENSE" }
+urls = { "Repository" = "https://github.com/KojiOchiai/awaitlist" }
 dependencies = []
 
 [build-system]
