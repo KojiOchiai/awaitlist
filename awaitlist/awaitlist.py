@@ -1,6 +1,6 @@
 import asyncio
 from datetime import datetime
-from typing import AsyncGenerator, List, Tuple
+from typing import AsyncGenerator
 
 
 class AwaitList:
@@ -11,7 +11,7 @@ class AwaitList:
 
     def __init__(self):
         # Task list [(execution time, task name)]
-        self.tasks: List[Tuple[datetime, str]] = []
+        self.tasks: list[tuple[datetime, str]] = []
         # For task notification
         self.condition = asyncio.Condition()
 
@@ -28,7 +28,7 @@ class AwaitList:
             self.tasks.sort(key=lambda x: x[0])  # Sort tasks by time
             self.condition.notify_all()  # Notify waiting processes
 
-    async def wait_for_next_task(self) -> AsyncGenerator[Tuple[datetime, str], None]:
+    async def wait_for_next_task(self) -> AsyncGenerator[tuple[datetime, str], None]:
         """
         Wait for the next task and yield it sequentially.
 
@@ -36,7 +36,7 @@ class AwaitList:
             Tuple[datetime, str]: Execution time and task name.
         """
         while True:
-            async with self.condition:
+            async with self.condition:  # Ensure the lock is acquired
                 if self.tasks:
                     now = datetime.now()
                     next_task_time, next_task_name = self.tasks[0]
@@ -55,8 +55,14 @@ class AwaitList:
 
             try:
                 if sleep_time is not None and sleep_time > 0:
-                    await asyncio.wait_for(self.condition.wait(), timeout=sleep_time)
+                    # Wait for either a timeout or a new task notification
+                    async with self.condition:
+                        await asyncio.wait_for(
+                            self.condition.wait(), timeout=sleep_time
+                        )
                 else:
-                    await self.condition.wait()
+                    # Wait indefinitely for a new task notification
+                    async with self.condition:
+                        await self.condition.wait()
             except asyncio.TimeoutError:
-                pass  # Re-evaluate when sleep ends or new tasks are added
+                pass  # Timeout occurred, recheck the task list
