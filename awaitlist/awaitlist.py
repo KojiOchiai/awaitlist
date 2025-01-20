@@ -12,11 +12,11 @@ class AwaitList:
 
     def __init__(self):
         # Task list [(execution time, task ID, task name)]
-        self.tasks: list[tuple[datetime, str, str]] = []
+        self.tasks: list[tuple[datetime, uuid.UUID, str]] = []
         # For task notification
         self.condition = asyncio.Condition()
 
-    async def add_task(self, task_time: datetime, task_name: str) -> str:
+    async def add_task(self, task_time: datetime, task_name: str) -> uuid.UUID:
         """
         Add a new task and return a task ID for cancellation.
 
@@ -25,21 +25,21 @@ class AwaitList:
             task_name (str): Task name.
 
         Returns:
-            str: Task ID that can be used to cancel the task.
+            uuid.UUID: Task ID that can be used to cancel the task.
         """
         async with self.condition:
-            task_id = str(uuid.uuid4())
+            task_id = uuid.uuid4()
             self.tasks.append((task_time, task_id, task_name))
             self.tasks.sort(key=lambda x: x[0])  # Sort tasks by time
             self.condition.notify_all()  # Notify waiting processes
             return task_id
 
-    async def cancel_task(self, task_id: str) -> bool:
+    async def cancel_task(self, task_id: uuid.UUID) -> bool:
         """
         Cancel a task by its ID.
 
         Args:
-            task_id (str): The ID of the task to cancel.
+            task_id (uuid.UUID): The ID of the task to cancel.
 
         Returns:
             bool: True if the task was successfully cancelled, False otherwise.
