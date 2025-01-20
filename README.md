@@ -1,6 +1,6 @@
 # AwaitList
 
-**AwaitList** is an asynchronous task scheduler for Python. It allows you to manage and wait for tasks based on their scheduled execution times using Python's `asyncio` framework.
+**AwaitList** is an asynchronous task scheduler for Python. It allows you to manage and wait for tasks based on their scheduled execution times using Python's `asyncio` framework. It is designed to perform long polling-like behavior locally.
 
 ## Features
 
