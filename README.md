@@ -8,6 +8,12 @@
 - **User-controlled Execution**: Tasks are not automatically executed when their scheduled time arrives. Instead, users control the execution by iterating through tasks using `async for`, allowing flexibility to integrate the task execution into custom workflows.
 - **Dynamic Task Management**: Add tasks dynamically at runtime.
 
+## Installation
+
+```bash
+pip install awaitlist
+```
+
 ## Usage
 
 ### Example: Scheduling and Executing Tasks
