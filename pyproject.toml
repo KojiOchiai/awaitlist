@@ -1,7 +1,7 @@
 [project]
 name = "awaitlist"
 version = "0.1.0"
-description = "Add your description here"
+description = "A simple async task scheduler"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []
