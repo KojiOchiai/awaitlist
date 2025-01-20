@@ -1,4 +1,5 @@
 import asyncio
+import uuid
 from datetime import datetime
 from typing import AsyncGenerator
 
@@ -10,23 +11,46 @@ class AwaitList:
     """
 
     def __init__(self):
-        # Task list [(execution time, task name)]
-        self.tasks: list[tuple[datetime, str]] = []
+        # Task list [(execution time, task ID, task name)]
+        self.tasks: list[tuple[datetime, str, str]] = []
         # For task notification
         self.condition = asyncio.Condition()
 
-    async def add_task(self, task_time: datetime, task_name: str):
+    async def add_task(self, task_time: datetime, task_name: str) -> str:
         """
-        Add a new task.
+        Add a new task and return a task ID for cancellation.
 
         Args:
             task_time (datetime): Scheduled execution time.
             task_name (str): Task name.
+
+        Returns:
+            str: Task ID that can be used to cancel the task.
         """
         async with self.condition:
-            self.tasks.append((task_time, task_name))
+            task_id = str(uuid.uuid4())
+            self.tasks.append((task_time, task_id, task_name))
             self.tasks.sort(key=lambda x: x[0])  # Sort tasks by time
             self.condition.notify_all()  # Notify waiting processes
+            return task_id
+
+    async def cancel_task(self, task_id: str) -> bool:
+        """
+        Cancel a task by its ID.
+
+        Args:
+            task_id (str): The ID of the task to cancel.
+
+        Returns:
+            bool: True if the task was successfully cancelled, False otherwise.
+        """
+        async with self.condition:
+            for i, (_, t_id, _) in enumerate(self.tasks):
+                if t_id == task_id:
+                    del self.tasks[i]
+                    self.condition.notify_all()
+                    return True
+            return False
 
     async def wait_for_next_task(self) -> AsyncGenerator[tuple[datetime, str], None]:
         """
@@ -39,7 +63,7 @@ class AwaitList:
             async with self.condition:  # Ensure the lock is acquired
                 if self.tasks:
                     now = datetime.now()
-                    next_task_time, next_task_name = self.tasks[0]
+                    next_task_time, _, next_task_name = self.tasks[0]
 
                     # If the next task is ready to execute
                     if next_task_time <= now:
