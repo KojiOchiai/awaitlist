@@ -4,13 +4,13 @@ from datetime import datetime, timedelta
 from awaitlist import AwaitList
 
 
-async def process_tasks(await_list: AwaitList):
+async def process_tasks(await_list: AwaitList) -> None:
     """Fetch tasks from the list and process them sequentially."""
     async for task_time, task_name in await_list.wait_for_next_task():
         print(f"[Processor] Executing: {task_name} at {datetime.now()}")
 
 
-async def add_tasks(await_list: AwaitList):
+async def add_tasks(await_list: AwaitList) -> None:
     """Example of dynamically adding tasks."""
     now = datetime.now()
     print(f"[AddTasks] Current time: {now}")
@@ -28,7 +28,7 @@ async def add_tasks(await_list: AwaitList):
     print(f"[AddTasks] Added: Task 1 second later for {task_time_1sec}")
 
 
-async def main():
+async def main() -> None:
     await_list = AwaitList()
     await asyncio.gather(process_tasks(await_list), add_tasks(await_list))
 
