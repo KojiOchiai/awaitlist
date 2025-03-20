@@ -6,7 +6,7 @@ from awaitlist.awaitlist import AwaitList
 
 
 @pytest.mark.asyncio
-async def test_add_and_wait_for_next_task():
+async def test_add_and_wait_for_next_task() -> None:
     await_list = AwaitList()
 
     # Add tasks based on the current time
@@ -27,7 +27,7 @@ async def test_add_and_wait_for_next_task():
 
 
 @pytest.mark.asyncio
-async def test_dynamic_task_addition():
+async def test_dynamic_task_addition() -> None:
     await_list = AwaitList()
 
     # Add tasks based on the current time
@@ -53,7 +53,7 @@ async def test_dynamic_task_addition():
 
 
 @pytest.mark.asyncio
-async def test_cancel_task():
+async def test_cancel_task() -> None:
     await_list = AwaitList()
 
     # Add tasks based on the current time

@@ -10,7 +10,7 @@ class AwaitList:
     Provides a mechanism to process tasks sequentially based on time.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Task list [(execution time, task ID, task name)]
         self.tasks: list[tuple[datetime, uuid.UUID, str]] = []
         # For task notification
