@@ -7,7 +7,10 @@ on:
         types: [published]
 
 jobs:
-  publish:
+  release:
+    permissions:
+      id-token: write
+      contents: read
 
     runs-on: ubuntu-latest
 
