@@ -21,7 +21,7 @@ pip install awaitlist
 Here’s a basic example of how to use `AwaitList` to schedule tasks and wait for their execution times.
 
 #### Code
-[sample.py](sample.py)
+[sample.py](https://github.com/KojiOchiai/awaitlist/blob/main/sample.py)
 ```python
 import asyncio
 from datetime import datetime, timedelta
