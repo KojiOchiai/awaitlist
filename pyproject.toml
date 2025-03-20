@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "KojiOchiai", email = "12869331+KojiOchiai@users.noreply.github.com" }
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 license = { file = "LICENSE" }
 urls = { "Repository" = "https://github.com/KojiOchiai/awaitlist" }
 dependencies = []
